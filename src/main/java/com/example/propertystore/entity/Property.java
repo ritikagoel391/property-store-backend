@@ -12,12 +12,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * This is an entity class for DB table - Property.
+ * 
+ * @author ritika.goel
+ *
+ */
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Property implements Serializable {
-	
+
 	/**
 	 * 
 	 */
@@ -26,10 +32,10 @@ public class Property implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(nullable = false, unique = true)
 	private String propertyName;
-	
+
 	@Column(nullable = false)
 	private String propertyValue;
 
