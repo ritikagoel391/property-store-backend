@@ -1,4 +1,4 @@
-package com.test.propertystore;
+package com.example.propertystore;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
