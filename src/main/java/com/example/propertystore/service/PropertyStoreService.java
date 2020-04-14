@@ -1,7 +1,6 @@
 package com.example.propertystore.service;
 
-import org.springframework.stereotype.Service;
-
+import com.example.exception.ApplicationException;
 import com.example.model.BaseResponse;
 import com.example.propertystore.entity.Property;
 
@@ -12,7 +11,6 @@ import com.example.propertystore.entity.Property;
  * @author ritika.goel
  *
  */
-@Service
 public interface PropertyStoreService {
 
 	/**
@@ -52,7 +50,8 @@ public interface PropertyStoreService {
 	 * the database.
 	 * 
 	 * @return
+	 * @throws ApplicationException 
 	 */
-	BaseResponse getProperties();
+	BaseResponse getProperties() throws ApplicationException;
 
 }

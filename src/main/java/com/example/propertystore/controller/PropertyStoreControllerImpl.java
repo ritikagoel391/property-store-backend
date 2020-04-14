@@ -1,7 +1,9 @@
 package com.example.propertystore.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.example.exception.ApplicationException;
 import com.example.model.BaseResponse;
 import com.example.propertystore.entity.Property;
 import com.example.propertystore.service.PropertyStoreService;
@@ -13,6 +15,7 @@ import com.example.propertystore.service.PropertyStoreService;
  * @author ritika.goel
  *
  */
+@RestController
 public class PropertyStoreControllerImpl implements PropertyStoreController {
 
 	@Autowired
@@ -52,9 +55,10 @@ public class PropertyStoreControllerImpl implements PropertyStoreController {
 
 	/**
 	 * {@inheritDoc}
+	 * @throws ApplicationException 
 	 */
 	@Override
-	public BaseResponse getProperties() {
+	public BaseResponse getProperties() throws ApplicationException {
 		return propertyStoreService.getProperties();
 	}
 

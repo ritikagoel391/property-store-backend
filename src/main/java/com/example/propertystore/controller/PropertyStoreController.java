@@ -5,9 +5,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
+import com.example.exception.ApplicationException;
 import com.example.model.BaseResponse;
 import com.example.propertystore.entity.Property;
 
@@ -18,7 +19,7 @@ import com.example.propertystore.entity.Property;
  * @author ritika.goel
  *
  */
-@RestController
+@RequestMapping(value = "/")
 public interface PropertyStoreController {
 
 	/**
@@ -27,7 +28,7 @@ public interface PropertyStoreController {
 	 * @param property
 	 * @return
 	 */
-	@PostMapping(value = "/add")
+	@PostMapping(value = "add")
 	BaseResponse addProperty(@RequestBody Property property);
 
 	/**
@@ -36,7 +37,7 @@ public interface PropertyStoreController {
 	 * @param property
 	 * @return
 	 */
-	@PutMapping(value = "/update")
+	@PutMapping(value = "update")
 	BaseResponse editProperty(@RequestBody Property property);
 
 	/**
@@ -45,7 +46,7 @@ public interface PropertyStoreController {
 	 * @param propertyName
 	 * @return
 	 */
-	@DeleteMapping(value = "/delete")
+	@DeleteMapping(value = "delete")
 	BaseResponse deleteProperty(@RequestParam String propertyName);
 
 	/**
@@ -54,7 +55,7 @@ public interface PropertyStoreController {
 	 * @param propertyName
 	 * @return
 	 */
-	@GetMapping(value = "/find")
+	@GetMapping(value = "find")
 	BaseResponse getProperty(@RequestParam String propertyName);
 
 	/**
@@ -62,7 +63,8 @@ public interface PropertyStoreController {
 	 * the database.
 	 * 
 	 * @return
+	 * @throws ApplicationException 
 	 */
-	@GetMapping(value = "/properties")
-	BaseResponse getProperties();
+	@GetMapping(value = "properties")
+	BaseResponse getProperties() throws ApplicationException;
 }

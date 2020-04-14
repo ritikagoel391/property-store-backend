@@ -2,6 +2,7 @@ package com.example.propertystore;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * This is the starting point of this spring boot application.
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  */
 @SpringBootApplication
+@ComponentScan(basePackages = "com.example")
 public class PropertyStoreBackendApplication {
 
 	/**
