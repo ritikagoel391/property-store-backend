@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -12,7 +14,6 @@ import com.example.constants.ApiResponseCode;
 import com.example.constants.Status;
 import com.example.exception.ApplicationException;
 import com.example.exception.ApplicationExceptionHelper;
-import com.example.propertystore.constants.PropertyStoreApiName;
 import com.example.propertystore.constants.PropertyStoreConstants;
 import com.example.propertystore.dto.PropertyDTO;
 import com.example.propertystore.entity.Property;
@@ -39,14 +40,14 @@ public class PropertyStoreServiceImpl implements PropertyStoreService {
 	 *
 	 */
 	@Override
-	public PropertyDTO addProperty(Property property) throws ApplicationException {
+	@Transactional(rollbackOn = Exception.class)
+	public PropertyDTO addProperty(Property property, String apiName) throws ApplicationException {
 		PropertyDTO propDTO = null;
 		try {
 			Property prop = propertyStoreRepository.save(property);
 			propDTO = new PropertyDTO(prop.getPropertyName(), prop.getPropertyValue());
-		} catch (Exception e) {
-			sendExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, Status.FAILURE, ApiResponseCode.INTERNAL_SERVER_ERROR, PropertyStoreApiName.PROPERTY_STORE_ADD_PROPERTY.toString(),
-					e.getMessage());
+		} catch (RuntimeException e) {
+			sendExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, Status.FAILURE, ApiResponseCode.INTERNAL_SERVER_ERROR, apiName, e.getMessage());
 		}
 		return propDTO;
 	}
@@ -56,21 +57,20 @@ public class PropertyStoreServiceImpl implements PropertyStoreService {
 	 * 
 	 */
 	@Override
-	public PropertyDTO editProperty(PropertyDTO property) throws ApplicationException {
+	@Transactional(rollbackOn = Exception.class)
+	public PropertyDTO editProperty(PropertyDTO property, String apiName) throws ApplicationException {
 		PropertyDTO propDTO = null;
 		try {
 			Optional<Property> propOpt = propertyStoreRepository.findByPropertyName(property.getPropertyName());
 			if (propOpt.isPresent()) {
 				Property prop = propOpt.get();
 				prop.setPropertyValue(property.getPropertyValue());
-				propDTO = this.addProperty(prop);
+				propDTO = this.addProperty(prop, apiName);
 			} else {
-				sendExceptionResponse(HttpStatus.OK, Status.SUCCESS, ApiResponseCode.NOT_FOUND, PropertyStoreApiName.PROPERTY_STORE_EDIT_PROPERTY.toString(),
-						PropertyStoreConstants.MSG_NO_PROP_FOUND + property.getPropertyName());
+				sendExceptionResponse(HttpStatus.OK, Status.SUCCESS, ApiResponseCode.NOT_FOUND, apiName, PropertyStoreConstants.MSG_NO_PROP_FOUND + property.getPropertyName());
 			}
-		} catch (Exception e) {
-			sendExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, Status.FAILURE, ApiResponseCode.INTERNAL_SERVER_ERROR, PropertyStoreApiName.PROPERTY_STORE_EDIT_PROPERTY.toString(),
-					e.getMessage());
+		} catch (RuntimeException e) {
+			sendExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, Status.FAILURE, ApiResponseCode.INTERNAL_SERVER_ERROR, apiName, e.getMessage());
 		}
 		return propDTO;
 	}
@@ -80,22 +80,19 @@ public class PropertyStoreServiceImpl implements PropertyStoreService {
 	 * 
 	 */
 	@Override
-	public PropertyDTO deleteProperty(String propertyName) throws ApplicationException {
-		PropertyDTO propDTO = null;
+	@Transactional(rollbackOn = Exception.class)
+	public PropertyDTO deleteProperty(String propertyName, String apiName) throws ApplicationException {
+		PropertyDTO prop = null;
 		try {
-			Optional<Property> propOpt = propertyStoreRepository.deleteByPropertyName(propertyName);
-			if (propOpt.isPresent()) {
-				Property prop = propOpt.get();
-				propDTO = new PropertyDTO(prop.getPropertyName(), prop.getPropertyValue());
-			} else {
-				sendExceptionResponse(HttpStatus.OK, Status.SUCCESS, ApiResponseCode.NOT_FOUND, PropertyStoreApiName.PROPERTY_STORE_DELETE_PROPERTY.toString(),
-						PropertyStoreConstants.MSG_NO_PROP_FOUND + propertyName);
+			prop = this.getProperty(propertyName, apiName);
+			Optional<Integer> deleteCountOpt = propertyStoreRepository.deleteByPropertyName(propertyName);
+			if (deleteCountOpt.isPresent() && deleteCountOpt.get() <= 0) {
+				sendExceptionResponse(HttpStatus.OK, Status.SUCCESS, ApiResponseCode.NOT_FOUND, apiName, PropertyStoreConstants.MSG_NO_PROP_FOUND + propertyName);
 			}
-		}catch (Exception e) {
-			sendExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, Status.FAILURE, ApiResponseCode.INTERNAL_SERVER_ERROR, PropertyStoreApiName.PROPERTY_STORE_DELETE_PROPERTY.toString(),
-					e.getMessage());
+		}catch (RuntimeException e) {
+			sendExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, Status.FAILURE, ApiResponseCode.INTERNAL_SERVER_ERROR, apiName, e.getMessage());
 		}
-		return propDTO;
+		return prop;
 	}
 
 	/**
@@ -103,7 +100,7 @@ public class PropertyStoreServiceImpl implements PropertyStoreService {
 	 * 
 	 */
 	@Override
-	public PropertyDTO getProperty(String propertyName) throws ApplicationException {
+	public PropertyDTO getProperty(String propertyName, String apiName) throws ApplicationException {
 		PropertyDTO propDTO = null;
 		try {
 			Optional<Property> propOpt = propertyStoreRepository.findByPropertyName(propertyName);
@@ -111,12 +108,10 @@ public class PropertyStoreServiceImpl implements PropertyStoreService {
 				Property prop = propOpt.get();
 				propDTO = new PropertyDTO(prop.getPropertyName(), prop.getPropertyValue());
 			} else {
-				sendExceptionResponse(HttpStatus.OK, Status.SUCCESS, ApiResponseCode.NOT_FOUND, PropertyStoreApiName.PROPERTY_STORE_GET_PROPERTY.toString(),
-						PropertyStoreConstants.MSG_NO_PROP_FOUND + propertyName);
+				sendExceptionResponse(HttpStatus.OK, Status.SUCCESS, ApiResponseCode.NOT_FOUND, apiName, PropertyStoreConstants.MSG_NO_PROP_FOUND + propertyName);
 			}
-		} catch (Exception e) {
-			sendExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, Status.FAILURE, ApiResponseCode.INTERNAL_SERVER_ERROR, PropertyStoreApiName.PROPERTY_STORE_GET_PROPERTY.toString(),
-					e.getMessage());
+		} catch (RuntimeException e) {
+			sendExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, Status.FAILURE, ApiResponseCode.INTERNAL_SERVER_ERROR, apiName, e.getMessage());
 		}
 		return propDTO;
 	}
@@ -126,15 +121,13 @@ public class PropertyStoreServiceImpl implements PropertyStoreService {
 	 *
 	 */
 	@Override
-	public List<PropertyDTO> getProperties() throws ApplicationException {
+	public List<PropertyDTO> getProperties(String apiName) throws ApplicationException {
 		List<PropertyDTO> propDtoList = null;
 		try {
 			List<Property> propList = propertyStoreRepository.findAll();
-			propDtoList = propList.stream().map(prop -> new PropertyDTO(prop.getPropertyName(), prop.getPropertyValue()))
-					.collect(Collectors.toList());
-		}catch (Exception e) {
-			sendExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, Status.FAILURE, ApiResponseCode.INTERNAL_SERVER_ERROR, PropertyStoreApiName.PROPERTY_STORE_GET_PROPERTY.toString(),
-					e.getMessage());
+			propDtoList = propList.stream().map(prop -> new PropertyDTO(prop.getPropertyName(), prop.getPropertyValue())).collect(Collectors.toList());
+		}catch (RuntimeException e) {
+			sendExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, Status.FAILURE, ApiResponseCode.INTERNAL_SERVER_ERROR, apiName, e.getMessage());
 		}
 		return propDtoList;
 	}

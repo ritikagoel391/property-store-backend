@@ -14,5 +14,5 @@ import com.example.propertystore.entity.Property;
  */
 public interface PropertyRepository extends JpaRepository<Property, Long> {
 	Optional<Property> findByPropertyName(String propertyName);
-	Optional<Property> deleteByPropertyName(String propertyName);
+	Optional<Integer> deleteByPropertyName(String propertyName);
 }

@@ -22,7 +22,7 @@ public interface PropertyStoreService {
 	 * @return
 	 * @throws ApplicationException 
 	 */
-	PropertyDTO addProperty(Property propertyStore) throws ApplicationException;
+	PropertyDTO addProperty(Property propertyStore, String apiName) throws ApplicationException;
 
 	/**
 	 * This method allows the client to update the value of an existing property.
@@ -31,7 +31,7 @@ public interface PropertyStoreService {
 	 * @return
 	 * @throws ApplicationException 
 	 */
-	PropertyDTO editProperty(PropertyDTO property) throws ApplicationException;
+	PropertyDTO editProperty(PropertyDTO property, String apiName) throws ApplicationException;
 
 	/**
 	 * This method allows the client to delete a property from the database.
@@ -40,7 +40,7 @@ public interface PropertyStoreService {
 	 * @return
 	 * @throws ApplicationException 
 	 */
-	PropertyDTO deleteProperty(String propertyName) throws ApplicationException;
+	PropertyDTO deleteProperty(String propertyName, String apiName) throws ApplicationException;
 
 	/**
 	 * This method allows the client to retrieve the value based on property name.
@@ -49,7 +49,7 @@ public interface PropertyStoreService {
 	 * @return
 	 * @throws ApplicationException 
 	 */
-	PropertyDTO getProperty(String propertyName) throws ApplicationException;
+	PropertyDTO getProperty(String propertyName, String apiName) throws ApplicationException;
 
 	/**
 	 * This method allows the client to retrieve all property names present within
@@ -58,6 +58,6 @@ public interface PropertyStoreService {
 	 * @return
 	 * @throws ApplicationException 
 	 */
-	List<PropertyDTO> getProperties() throws ApplicationException;
+	List<PropertyDTO> getProperties(String apiName) throws ApplicationException;
 
 }

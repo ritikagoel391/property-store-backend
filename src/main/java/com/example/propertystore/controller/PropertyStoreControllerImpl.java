@@ -33,7 +33,7 @@ public class PropertyStoreControllerImpl implements PropertyStoreController {
 	@Override
 	public ApplicationResponse<PropertyDTO> addProperty(Property property) throws ApplicationException {
 		return ResponseUtil.createApplicationResponse(PropertyStoreApiName.PROPERTY_STORE_ADD_PROPERTY.toString(),
-				propertyStoreService.addProperty(property));
+				propertyStoreService.addProperty(property, PropertyStoreApiName.PROPERTY_STORE_ADD_PROPERTY.toString()));
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class PropertyStoreControllerImpl implements PropertyStoreController {
 	@Override
 	public ApplicationResponse<PropertyDTO> editProperty(PropertyDTO property) throws ApplicationException {
 		return ResponseUtil.createApplicationResponse(PropertyStoreApiName.PROPERTY_STORE_EDIT_PROPERTY.toString(),
-				propertyStoreService.editProperty(property));
+				propertyStoreService.editProperty(property, PropertyStoreApiName.PROPERTY_STORE_EDIT_PROPERTY.toString()));
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class PropertyStoreControllerImpl implements PropertyStoreController {
 	@Override
 	public ApplicationResponse<PropertyDTO> deleteProperty(String propertyName) throws ApplicationException {
 		return ResponseUtil.createApplicationResponse(PropertyStoreApiName.PROPERTY_STORE_DELETE_PROPERTY.toString(),
-				propertyStoreService.deleteProperty(propertyName));
+				propertyStoreService.deleteProperty(propertyName, PropertyStoreApiName.PROPERTY_STORE_DELETE_PROPERTY.toString()));
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class PropertyStoreControllerImpl implements PropertyStoreController {
 	@Override
 	public ApplicationResponse<PropertyDTO> getProperty(String propertyName) throws ApplicationException {
 		return ResponseUtil.createApplicationResponse(PropertyStoreApiName.PROPERTY_STORE_GET_PROPERTY.toString(),
-				propertyStoreService.getProperty(propertyName));
+				propertyStoreService.getProperty(propertyName, PropertyStoreApiName.PROPERTY_STORE_GET_PROPERTY.toString()));
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class PropertyStoreControllerImpl implements PropertyStoreController {
 	@Override
 	public ApplicationResponse<List<PropertyDTO>> getProperties() throws ApplicationException {
 		return ResponseUtil.createApplicationResponse(PropertyStoreApiName.PROPERTY_STORE_GET_PROPERTIES.toString(),
-				propertyStoreService.getProperties());
+				propertyStoreService.getProperties(PropertyStoreApiName.PROPERTY_STORE_GET_PROPERTIES.toString()));
 	}
 
 }
