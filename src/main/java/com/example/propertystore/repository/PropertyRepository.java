@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.propertystore.entity.Property;
 
 /**
- * This interface deines the JPA repository for {@link Property} entity.
+ * This interface defines the JPA repository for {@link Property} entity.
  * 
  * @author ritika.goel
  *

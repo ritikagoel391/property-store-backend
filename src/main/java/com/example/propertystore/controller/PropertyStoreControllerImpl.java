@@ -1,12 +1,21 @@
 package com.example.propertystore.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.constants.ApiResponseCode;
+import com.example.constants.Status;
 import com.example.exception.ApplicationException;
-import com.example.model.BaseResponse;
+import com.example.exception.ApplicationExceptionHelper;
+import com.example.propertystore.constants.PropertyStoreApiName;
+import com.example.propertystore.dto.PropertyDTO;
 import com.example.propertystore.entity.Property;
 import com.example.propertystore.service.PropertyStoreService;
+import com.example.response.ResponseUtil;
+import com.example.response.model.ApplicationResponse;
 
 /**
  * This is the implementation of controller class that facilitates CRUD
@@ -21,11 +30,14 @@ public class PropertyStoreControllerImpl implements PropertyStoreController {
 	@Autowired
 	PropertyStoreService propertyStoreService;
 
+	@Autowired
+	ApplicationExceptionHelper exceptionHelper;
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public BaseResponse addProperty(Property property) {
+	public ApplicationResponse addProperty(Property property) {
 		return propertyStoreService.addProperty(property);
 	}
 
@@ -33,7 +45,7 @@ public class PropertyStoreControllerImpl implements PropertyStoreController {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public BaseResponse editProperty(Property property) {
+	public ApplicationResponse editProperty(Property property) {
 		return propertyStoreService.editProperty(property);
 	}
 
@@ -41,7 +53,7 @@ public class PropertyStoreControllerImpl implements PropertyStoreController {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public BaseResponse deleteProperty(String propertyName) {
+	public ApplicationResponse deleteProperty(String propertyName) {
 		return propertyStoreService.deleteProperty(propertyName);
 	}
 
@@ -49,17 +61,28 @@ public class PropertyStoreControllerImpl implements PropertyStoreController {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public BaseResponse getProperty(String propertyName) {
+	public ApplicationResponse getProperty(String propertyName) {
 		return propertyStoreService.getProperty(propertyName);
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @throws ApplicationException 
+	 * 
+	 * @throws ApplicationException
 	 */
 	@Override
-	public BaseResponse getProperties() throws ApplicationException {
-		return propertyStoreService.getProperties();
+	public ApplicationResponse<List<PropertyDTO>> getProperties() throws ApplicationException {
+		ApplicationResponse<List<PropertyDTO>> response = null;
+		try {
+			response = ResponseUtil.createApplicationResponse(
+					PropertyStoreApiName.PROPERTY_STORE_GET_PROPERTIES.toString(),
+					propertyStoreService.getProperties());
+		} catch (Exception e) {
+			exceptionHelper.raiseApplicationException(HttpStatus.INTERNAL_SERVER_ERROR, Status.FAILURE,
+					ApiResponseCode.INTERNAL_SERVER_ERROR,
+					PropertyStoreApiName.PROPERTY_STORE_GET_PROPERTIES.toString(), null);
+		}
+		return response;
 	}
 
 }

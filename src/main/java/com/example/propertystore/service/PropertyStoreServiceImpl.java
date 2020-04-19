@@ -1,16 +1,15 @@
 package com.example.propertystore.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.example.constants.ApiResponseCode;
-import com.example.constants.Status;
-import com.example.exception.ApplicationException;
-import com.example.exception.ApplicationExceptionHelper;
-import com.example.model.BaseResponse;
+import com.example.propertystore.dto.PropertyDTO;
 import com.example.propertystore.entity.Property;
 import com.example.propertystore.repository.PropertyRepository;
+import com.example.response.model.ApplicationResponse;
 
 /**
  * This is the implementation of service class that facilitates CRUD operations
@@ -25,14 +24,11 @@ public class PropertyStoreServiceImpl implements PropertyStoreService {
 	@Autowired
 	PropertyRepository propertyStoreRepository;
 
-	@Autowired
-	ApplicationExceptionHelper exceptionHelper;
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public BaseResponse addProperty(Property property) {
+	public ApplicationResponse addProperty(Property property) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -41,7 +37,7 @@ public class PropertyStoreServiceImpl implements PropertyStoreService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public BaseResponse editProperty(Property property) {
+	public ApplicationResponse editProperty(Property property) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -50,7 +46,7 @@ public class PropertyStoreServiceImpl implements PropertyStoreService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public BaseResponse deleteProperty(String propertyName) {
+	public ApplicationResponse deleteProperty(String propertyName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -59,19 +55,19 @@ public class PropertyStoreServiceImpl implements PropertyStoreService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public BaseResponse getProperty(String propertyName) {
-		// TODO Auto-generated method stub
+	public ApplicationResponse getProperty(String propertyName) {
 		return null;
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @throws ApplicationException 
+	 * 
+	 *
 	 */
 	@Override
-	public BaseResponse getProperties() throws ApplicationException {
-		exceptionHelper.raiseApplicationException(HttpStatus.INTERNAL_SERVER_ERROR, Status.FAILURE,
-				ApiResponseCode.INTERNAL_SERVER_ERROR, "PROPERTY_STORE:GET_PROPERTIES", null);
-		return null;
+	public List<PropertyDTO> getProperties() {
+		List<Property> propList = propertyStoreRepository.findAll();
+		return propList.stream().map(prop -> new PropertyDTO(prop.getPropertyName(), prop.getPropertyValue()))
+				.collect(Collectors.toList());
 	}
 }

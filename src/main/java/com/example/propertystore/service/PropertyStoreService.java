@@ -1,8 +1,11 @@
 package com.example.propertystore.service;
 
+import java.util.List;
+
 import com.example.exception.ApplicationException;
-import com.example.model.BaseResponse;
+import com.example.propertystore.dto.PropertyDTO;
 import com.example.propertystore.entity.Property;
+import com.example.response.model.ApplicationResponse;
 
 /**
  * This is a service class that facilitates CRUD operations for the
@@ -19,7 +22,7 @@ public interface PropertyStoreService {
 	 * @param property
 	 * @return
 	 */
-	BaseResponse addProperty(Property propertyStore);
+	ApplicationResponse addProperty(Property propertyStore);
 
 	/**
 	 * This method allows the client to update the value of an existing property.
@@ -27,7 +30,7 @@ public interface PropertyStoreService {
 	 * @param property
 	 * @return
 	 */
-	BaseResponse editProperty(Property property);
+	ApplicationResponse editProperty(Property property);
 
 	/**
 	 * This method allows the client to delete a property from the database.
@@ -35,7 +38,7 @@ public interface PropertyStoreService {
 	 * @param propertyName
 	 * @return
 	 */
-	BaseResponse deleteProperty(String propertyName);
+	ApplicationResponse deleteProperty(String propertyName);
 
 	/**
 	 * This method allows the client to retrieve the value based on property name.
@@ -43,7 +46,7 @@ public interface PropertyStoreService {
 	 * @param propertyName
 	 * @return
 	 */
-	BaseResponse getProperty(String propertyName);
+	ApplicationResponse getProperty(String propertyName);
 
 	/**
 	 * This method allows the client to retrieve all property names present within
@@ -52,6 +55,6 @@ public interface PropertyStoreService {
 	 * @return
 	 * @throws ApplicationException 
 	 */
-	BaseResponse getProperties() throws ApplicationException;
+	List<PropertyDTO> getProperties();
 
 }

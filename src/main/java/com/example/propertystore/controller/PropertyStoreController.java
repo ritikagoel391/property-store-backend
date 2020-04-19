@@ -1,5 +1,7 @@
 package com.example.propertystore.controller;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.exception.ApplicationException;
-import com.example.model.BaseResponse;
+import com.example.propertystore.dto.PropertyDTO;
 import com.example.propertystore.entity.Property;
+import com.example.response.model.ApplicationResponse;
 
 /**
  * This is a controller class that facilitates CRUD operations for the
@@ -29,7 +32,7 @@ public interface PropertyStoreController {
 	 * @return
 	 */
 	@PostMapping(value = "add")
-	BaseResponse addProperty(@RequestBody Property property);
+	ApplicationResponse addProperty(@RequestBody Property property);
 
 	/**
 	 * This method allows the client to update the value of an existing property.
@@ -38,7 +41,7 @@ public interface PropertyStoreController {
 	 * @return
 	 */
 	@PutMapping(value = "update")
-	BaseResponse editProperty(@RequestBody Property property);
+	ApplicationResponse editProperty(@RequestBody Property property);
 
 	/**
 	 * This method allows the client to delete a property from the database.
@@ -47,7 +50,7 @@ public interface PropertyStoreController {
 	 * @return
 	 */
 	@DeleteMapping(value = "delete")
-	BaseResponse deleteProperty(@RequestParam String propertyName);
+	ApplicationResponse deleteProperty(@RequestParam String propertyName);
 
 	/**
 	 * This method allows the client to retrieve the value based on property name.
@@ -56,7 +59,7 @@ public interface PropertyStoreController {
 	 * @return
 	 */
 	@GetMapping(value = "find")
-	BaseResponse getProperty(@RequestParam String propertyName);
+	ApplicationResponse getProperty(@RequestParam String propertyName);
 
 	/**
 	 * This method allows the client to retrieve all property names present within
@@ -66,5 +69,5 @@ public interface PropertyStoreController {
 	 * @throws ApplicationException 
 	 */
 	@GetMapping(value = "properties")
-	BaseResponse getProperties() throws ApplicationException;
+	ApplicationResponse<List<PropertyDTO>> getProperties() throws ApplicationException;
 }

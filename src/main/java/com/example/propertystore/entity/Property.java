@@ -8,10 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  * This is an entity class for DB table - Property.
  * 
@@ -19,9 +15,6 @@ import lombok.NoArgsConstructor;
  *
  */
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Property implements Serializable {
 
 	/**
@@ -39,4 +32,37 @@ public class Property implements Serializable {
 	@Column(nullable = false)
 	private String propertyValue;
 
+	public Property(Long id, String propertyName, String propertyValue) {
+		super();
+		this.id = id;
+		this.propertyName = propertyName;
+		this.propertyValue = propertyValue;
+	}
+
+	public Property() {
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getPropertyName() {
+		return propertyName;
+	}
+
+	public void setPropertyName(String propertyName) {
+		this.propertyName = propertyName;
+	}
+
+	public String getPropertyValue() {
+		return propertyValue;
+	}
+
+	public void setPropertyValue(String propertyValue) {
+		this.propertyValue = propertyValue;
+	}
 }
