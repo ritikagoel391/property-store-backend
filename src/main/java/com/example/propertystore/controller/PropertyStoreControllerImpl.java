@@ -3,13 +3,9 @@ package com.example.propertystore.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.constants.ApiResponseCode;
-import com.example.constants.Status;
 import com.example.exception.ApplicationException;
-import com.example.exception.ApplicationExceptionHelper;
 import com.example.propertystore.constants.PropertyStoreApiName;
 import com.example.propertystore.dto.PropertyDTO;
 import com.example.propertystore.entity.Property;
@@ -30,59 +26,54 @@ public class PropertyStoreControllerImpl implements PropertyStoreController {
 	@Autowired
 	PropertyStoreService propertyStoreService;
 
-	@Autowired
-	ApplicationExceptionHelper exceptionHelper;
-
 	/**
 	 * {@inheritDoc}
+	 * 
 	 */
 	@Override
-	public ApplicationResponse addProperty(Property property) {
-		return propertyStoreService.addProperty(property);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ApplicationResponse editProperty(Property property) {
-		return propertyStoreService.editProperty(property);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ApplicationResponse deleteProperty(String propertyName) {
-		return propertyStoreService.deleteProperty(propertyName);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ApplicationResponse getProperty(String propertyName) {
-		return propertyStoreService.getProperty(propertyName);
+	public ApplicationResponse<PropertyDTO> addProperty(Property property) throws ApplicationException {
+		return ResponseUtil.createApplicationResponse(PropertyStoreApiName.PROPERTY_STORE_ADD_PROPERTY.toString(),
+				propertyStoreService.addProperty(property));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @throws ApplicationException
+	 */
+	@Override
+	public ApplicationResponse<PropertyDTO> editProperty(PropertyDTO property) throws ApplicationException {
+		return ResponseUtil.createApplicationResponse(PropertyStoreApiName.PROPERTY_STORE_EDIT_PROPERTY.toString(),
+				propertyStoreService.editProperty(property));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
+	@Override
+	public ApplicationResponse<PropertyDTO> deleteProperty(String propertyName) throws ApplicationException {
+		return ResponseUtil.createApplicationResponse(PropertyStoreApiName.PROPERTY_STORE_DELETE_PROPERTY.toString(),
+				propertyStoreService.deleteProperty(propertyName));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
+	@Override
+	public ApplicationResponse<PropertyDTO> getProperty(String propertyName) throws ApplicationException {
+		return ResponseUtil.createApplicationResponse(PropertyStoreApiName.PROPERTY_STORE_GET_PROPERTY.toString(),
+				propertyStoreService.getProperty(propertyName));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
 	 */
 	@Override
 	public ApplicationResponse<List<PropertyDTO>> getProperties() throws ApplicationException {
-		ApplicationResponse<List<PropertyDTO>> response = null;
-		try {
-			response = ResponseUtil.createApplicationResponse(
-					PropertyStoreApiName.PROPERTY_STORE_GET_PROPERTIES.toString(),
-					propertyStoreService.getProperties());
-		} catch (Exception e) {
-			exceptionHelper.raiseApplicationException(HttpStatus.INTERNAL_SERVER_ERROR, Status.FAILURE,
-					ApiResponseCode.INTERNAL_SERVER_ERROR,
-					PropertyStoreApiName.PROPERTY_STORE_GET_PROPERTIES.toString(), null);
-		}
-		return response;
+		return ResponseUtil.createApplicationResponse(PropertyStoreApiName.PROPERTY_STORE_GET_PROPERTIES.toString(),
+				propertyStoreService.getProperties());
 	}
 
 }

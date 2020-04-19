@@ -5,7 +5,6 @@ import java.util.List;
 import com.example.exception.ApplicationException;
 import com.example.propertystore.dto.PropertyDTO;
 import com.example.propertystore.entity.Property;
-import com.example.response.model.ApplicationResponse;
 
 /**
  * This is a service class that facilitates CRUD operations for the
@@ -21,32 +20,36 @@ public interface PropertyStoreService {
 	 * 
 	 * @param property
 	 * @return
+	 * @throws ApplicationException 
 	 */
-	ApplicationResponse addProperty(Property propertyStore);
+	PropertyDTO addProperty(Property propertyStore) throws ApplicationException;
 
 	/**
 	 * This method allows the client to update the value of an existing property.
 	 * 
 	 * @param property
 	 * @return
+	 * @throws ApplicationException 
 	 */
-	ApplicationResponse editProperty(Property property);
+	PropertyDTO editProperty(PropertyDTO property) throws ApplicationException;
 
 	/**
 	 * This method allows the client to delete a property from the database.
 	 * 
 	 * @param propertyName
 	 * @return
+	 * @throws ApplicationException 
 	 */
-	ApplicationResponse deleteProperty(String propertyName);
+	PropertyDTO deleteProperty(String propertyName) throws ApplicationException;
 
 	/**
 	 * This method allows the client to retrieve the value based on property name.
 	 * 
 	 * @param propertyName
 	 * @return
+	 * @throws ApplicationException 
 	 */
-	ApplicationResponse getProperty(String propertyName);
+	PropertyDTO getProperty(String propertyName) throws ApplicationException;
 
 	/**
 	 * This method allows the client to retrieve all property names present within
@@ -55,6 +58,6 @@ public interface PropertyStoreService {
 	 * @return
 	 * @throws ApplicationException 
 	 */
-	List<PropertyDTO> getProperties();
+	List<PropertyDTO> getProperties() throws ApplicationException;
 
 }

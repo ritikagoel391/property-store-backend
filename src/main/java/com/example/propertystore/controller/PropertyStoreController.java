@@ -30,36 +30,40 @@ public interface PropertyStoreController {
 	 * 
 	 * @param property
 	 * @return
+	 * @throws ApplicationException 
 	 */
 	@PostMapping(value = "add")
-	ApplicationResponse addProperty(@RequestBody Property property);
+	ApplicationResponse<PropertyDTO> addProperty(@RequestBody Property property) throws ApplicationException;
 
 	/**
 	 * This method allows the client to update the value of an existing property.
 	 * 
 	 * @param property
 	 * @return
+	 * @throws ApplicationException 
 	 */
 	@PutMapping(value = "update")
-	ApplicationResponse editProperty(@RequestBody Property property);
+	ApplicationResponse<PropertyDTO> editProperty(@RequestBody PropertyDTO property) throws ApplicationException;
 
 	/**
 	 * This method allows the client to delete a property from the database.
 	 * 
 	 * @param propertyName
 	 * @return
+	 * @throws ApplicationException 
 	 */
 	@DeleteMapping(value = "delete")
-	ApplicationResponse deleteProperty(@RequestParam String propertyName);
+	ApplicationResponse<PropertyDTO> deleteProperty(@RequestParam String propertyName) throws ApplicationException;
 
 	/**
 	 * This method allows the client to retrieve the value based on property name.
 	 * 
 	 * @param propertyName
 	 * @return
+	 * @throws ApplicationException 
 	 */
 	@GetMapping(value = "find")
-	ApplicationResponse getProperty(@RequestParam String propertyName);
+	ApplicationResponse<PropertyDTO> getProperty(@RequestParam String propertyName) throws ApplicationException;
 
 	/**
 	 * This method allows the client to retrieve all property names present within
